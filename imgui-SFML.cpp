@@ -425,10 +425,10 @@ void ProcessEvent(const sf::Event& event) {
 }
 
 void Update(sf::RenderWindow& window, sf::Time dt) {
-    Update(window, window, dt);
+    Update(window, static_cast<sf::Vector2f>(window.getSize()), dt);
 }
 
-void Update(sf::Window& window, sf::RenderTarget& target, sf::Time dt) {
+void Update(sf::Window& window, const sf::Vector2f& displaySize, sf::Time dt) {
     SetCurrentWindow(window);
     // Update OS/hardware mouse cursor if imgui isn't drawing a software cursor
     updateMouseCursor(window);
@@ -437,9 +437,9 @@ void Update(sf::Window& window, sf::RenderTarget& target, sf::Time dt) {
     if (!s_currWindowCtx->mouseMoved) {
         if (sf::Touch::isDown(0)) s_currWindowCtx->touchPos = sf::Touch::getPosition(0, window);
 
-        Update(s_currWindowCtx->touchPos, static_cast<sf::Vector2f>(target.getSize()), dt);
+        Update(s_currWindowCtx->touchPos, displaySize, dt);
     } else {
-        Update(sf::Mouse::getPosition(window), static_cast<sf::Vector2f>(target.getSize()), dt);
+        Update(sf::Mouse::getPosition(window), displaySize, dt);
     }
 
     if (ImGui::GetIO().MouseDrawCursor) {
